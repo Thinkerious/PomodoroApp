@@ -9,14 +9,15 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-top: 20px; /* Add margin for space */
     margin-right: 20px;
+    color: #333;
   }
   
   .work-timer {
-    background-color: #f7c7c7; /* Light pastel color for work timer */
+    background-color: #fff; /* Light pastel color for work timer */
   }
   
   .break-timer {
-    background-color: #c7f7c7; /* Light pastel color for break timer */
+    background-color: #fff; /* Light pastel color for break timer */
   }
   
   h2 {

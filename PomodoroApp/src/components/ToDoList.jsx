@@ -36,7 +36,7 @@ function TodoList() {
             <input type="checkbox" />
             <label>{task}</label>
             <button className="delete-button" onClick={() => removeTask(index)}>
-              X
+              x
             </button>
           </li>
         ))}

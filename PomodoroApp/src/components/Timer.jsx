@@ -3,37 +3,41 @@ import React, { useState, useEffect } from 'react';
 import './Timer.css';
 
 function Timer({ title, minutes, setMinutes, breakTimer }) {
-    const [seconds, setSeconds] = useState(0);
-    const [isActive, setIsActive] = useState(false);
-  
-    useEffect(() => {
-      let interval;
-  
-      if (isActive && (minutes > 0 || seconds > 0)) {
-        interval = setInterval(() => {
-          if (seconds === 0) {
-            if (minutes === 0) {
-              setIsActive(false);
-  
-              if (!breakTimer) {
-                // Start the break timer automatically
-                setMinutes(5); // Set default break time
-                setIsActive(true);
-              }
-            } else {
-              setMinutes((prevMinutes) => prevMinutes - 1); // Decrement minutes
-              setSeconds(59); // Reset seconds to 59
+  const [seconds, setSeconds] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    let interval;
+
+    if (isActive && (minutes > 0 || seconds > 0)) {
+      interval = setInterval(() => {
+        if (seconds === 0) {
+          if (minutes === 0) {
+            setIsActive(false);
+
+            if (!breakTimer) {
+              // Start the break timer automatically
+              setMinutes(5); // Set default break time
+              setIsActive(true);
             }
           } else {
-            setSeconds((prevSeconds) => prevSeconds - 1); // Decrement seconds
+            setMinutes((prevMinutes) => prevMinutes - 1);
+            setSeconds(59);
           }
-        }, 1000);
-      } else {
-        clearInterval(interval);
-      }
-  
-      return () => clearInterval(interval);
-    }, [isActive, seconds, minutes, setMinutes, breakTimer]);
+        } else {
+          setSeconds((prevSeconds) => prevSeconds - 1);
+        }
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isActive, seconds, minutes, setMinutes, breakTimer]);
+
+  const handleMinutesChange = (e) => {
+    setMinutes(Number(e.target.value)); // Ensure it's a number
+  };
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -52,7 +56,7 @@ function Timer({ title, minutes, setMinutes, breakTimer }) {
         <input
           type="number"
           value={minutes}
-          onChange={(e) => setMinutes(e.target.value)}
+          onChange={handleMinutesChange}
           min="1"
         />
         <span> minutes</span>
