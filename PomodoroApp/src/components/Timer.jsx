@@ -1,38 +1,39 @@
+// Timer.jsx
 import React, { useState, useEffect } from 'react';
 import './Timer.css';
 
-function Timer({ workMinutes, breakMinutes }) {
-  const [minutes, setMinutes] = useState(workMinutes);
-  const [seconds, setSeconds] = useState(0);
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    let interval;
-
-    if (isActive) {
-      interval = setInterval(() => {
-        if (seconds === 0) {
-          if (minutes === 0) {
-            // Timer finished
-            setIsActive(false);
-            // Handle switching between work and break
-            if (workMinutes > 0) {
-              setMinutes(breakMinutes);
+function Timer({ title, minutes, setMinutes, breakTimer }) {
+    const [seconds, setSeconds] = useState(0);
+    const [isActive, setIsActive] = useState(false);
+  
+    useEffect(() => {
+      let interval;
+  
+      if (isActive && (minutes > 0 || seconds > 0)) {
+        interval = setInterval(() => {
+          if (seconds === 0) {
+            if (minutes === 0) {
+              setIsActive(false);
+  
+              if (!breakTimer) {
+                // Start the break timer automatically
+                setMinutes(5); // Set default break time
+                setIsActive(true);
+              }
+            } else {
+              setMinutes((prevMinutes) => prevMinutes - 1); // Decrement minutes
+              setSeconds(59); // Reset seconds to 59
             }
           } else {
-            setMinutes(minutes - 1);
-            setSeconds(59);
+            setSeconds((prevSeconds) => prevSeconds - 1); // Decrement seconds
           }
-        } else {
-          setSeconds(seconds - 1);
-        }
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isActive, minutes, seconds, workMinutes, breakMinutes]);
+        }, 1000);
+      } else {
+        clearInterval(interval);
+      }
+  
+      return () => clearInterval(interval);
+    }, [isActive, seconds, minutes, setMinutes, breakTimer]);
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -40,12 +41,22 @@ function Timer({ workMinutes, breakMinutes }) {
 
   const resetTimer = () => {
     setIsActive(false);
-    setMinutes(workMinutes);
+    setMinutes(breakTimer ? 5 : 25); // Set default times for work and break
     setSeconds(0);
   };
 
   return (
-    <div className="Timer">
+    <div className={`Timer ${breakTimer ? 'break-timer' : 'work-timer'}`}>
+      <h2>{title}</h2>
+      <div className="timer-input">
+        <input
+          type="number"
+          value={minutes}
+          onChange={(e) => setMinutes(e.target.value)}
+          min="1"
+        />
+        <span> minutes</span>
+      </div>
       <div className="timer-display">
         {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
       </div>

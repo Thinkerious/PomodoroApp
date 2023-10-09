@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Timer from './components/Timer';
+import './components/Timer.css'; // Import Timer styles
 import TodoList from './components/ToDoList';
 
 function App() {
@@ -11,7 +12,20 @@ function App() {
   return (
     <div className="App">
       <h1>Pomodoro App</h1>
-      <Timer workMinutes={workMinutes} breakMinutes={breakMinutes} />
+      <div className="timer-container">
+        <Timer
+          title="Work Timer"
+          minutes={workMinutes}
+          setMinutes={setWorkMinutes}
+          breakTimer={false}
+        />
+        <Timer
+          title="Break Timer"
+          minutes={breakMinutes}
+          setMinutes={setBreakMinutes}
+          breakTimer={true}
+        />
+      </div>
       <TodoList />
     </div>
   );
